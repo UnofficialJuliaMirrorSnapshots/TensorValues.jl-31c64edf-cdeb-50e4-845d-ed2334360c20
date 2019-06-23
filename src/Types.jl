@@ -116,9 +116,17 @@ function zero(::Type{<:MultiValue{S,T,N,L}}) where {S,T,N,L}
   MultiValue{S,T,N,L}(z)
 end
 
+function zero(::MultiValue{S,T,N,L}) where {S,T,N,L}
+  zero(MultiValue{S,T,N,L})
+end
+
 function one(::Type{<:MultiValue{S,T,N,L}}) where {S,T,N,L}
   z = one(SArray{S,T,N,L})
   MultiValue{S,T,N,L}(z)
+end
+
+function one(::MultiValue{S,T,N,L}) where {S,T,N,L}
+  one(MultiValue{S,T,N,L})
 end
 
 # Conversions
@@ -135,12 +143,18 @@ end
 
 # Misc operations on the type itself
 
-length(::Type{MultiValue{S,T,N,L}}) where {S,T,N,L} = L
+length(::Type{<: MultiValue{S,T,N,L} where {S,T,N}}  ) where L = L
 
 function size(::Type{MultiValue{S,T,N,L}}) where {S,T,N,L}
   A = SArray{S,T,N,L}
   size(A)
 end
+
+function size(::Type{<:MultiValue{S}}) where S
+  _s(Size(S))
+end
+
+@pure _s(s::Size{T}) where T = T
 
 # Custom type printing
 
